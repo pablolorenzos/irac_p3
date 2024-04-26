@@ -10,6 +10,14 @@ GNU nano 6.2                                    coder.bash
 ./x264 --output high_config.264 --fps 24 --preset slow --bitrate 2400 --vbv-maxrate 4800 --vbv-bufsize 9600 --min-keyint 48 --keyint 48 --scenecut 0 --no-scenecut --pass 1 --video-filter "resize:width=1280,height=720" video_p3.mp4
 ./gpac_public/bin/gcc/MP4Box -add high_config.264 -fps 24 High_config.mp4
 
+Bento4/bin/mp4fragment Low_config.mp4 Low_config_fragment.mp4
+Bento4/bin/mp4fragment Medium_config.mp4 Medium_config_fragment.mp4
+Bento4/bin/mp4fragment High_config.mp4 High_config_fragment.mp4
+
+Bento4/bin/mp4dash Low_config_fragment.mp4 Medium_config_fragment.mp4 High_config_fragment.mp4
+
+
+
 
 
 

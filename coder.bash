@@ -20,6 +20,9 @@ Bento4/bin/mp4encrypt --method MPEG-CENC --key 1:87237D20A19F58A740C05684E699B4A
 Bento4/bin/mp4encrypt --method MPEG-CENC --key 1:87237D20A19F58A740C05684E699B4AA:random --property 1:KID:A16E402B9056E371F36D348AA62BB749 --global-option mpeg-cenc.eme-pssh:true Medium_config_fragment.mp4 Medium_config_fragment_drm.mp4
 Bento4/bin/mp4encrypt --method MPEG-CENC --key 1:87237D20A19F58A740C05684E699B4AA:random --property 1:KID:A16E402B9056E371F36D348AA62BB749 --global-option mpeg-cenc.eme-pssh:true High_config_fragment.mp4 High_config_fragment_drm.mp4
 
+rm -r output
+
+Bento4/bin/mp4dash Low_config_fragment_drm.mp4 Medium_config_fragment_drm.mp4 High_config_fragment_drm.mp4
 
 
 

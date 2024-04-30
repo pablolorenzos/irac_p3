@@ -1,3 +1,4 @@
+  GNU nano 6.2                                                                                   index.html                                                                                            
 <script src="dash.all.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
@@ -28,16 +29,19 @@ const protData = {
 }
 };
 
+var bitrate_list = []
+
 var ctx = document.getElementById('myChart').getContext('2d');
-var myLineChart = new Chart(ctx, {
-    type: 'line', // Tipo de gráfico: línea
+var myChart = new Chart(ctx, {
+    type: 'line', // Tipo de gr  fico: l  nea
     data: {
         datasets: [{
             label: 'Datos de Ejemplo',
-            data: [65, 59, 80, 81, 56, 55], // La lista de datos
+            data: bitrate_list, // La lista de datos
             fill: false,
+
             borderColor: 'rgb(75, 192, 192)',
-            tension: 0.1 // Hace la línea ligeramente curvada
+            tension: 0.1 // Hace la l  nea ligeramente curvada
         }]
     },
     options: {
@@ -48,15 +52,15 @@ var myLineChart = new Chart(ctx, {
         }
     }
 });
-  
+
 var video
 var  player
 var  mpd_url = "./output/stream.mpd";
 video = document.querySelector("video");
 player = dashjs.MediaPlayer().create();
-  
+
 player.setProtectionData(protData); // encription
-  
+
 player.initialize(video, mpd_url, true);
 player.on(dashjs.MediaPlayer.events["PLAYBACK_ENDED"], function() {
 clearInterval(eventPoller);
@@ -75,6 +79,10 @@ var dashAdapter = player.getDashAdapter();
  document.getElementById('buffer').innerText = bufferLevel + " secs";
  document.getElementById('bitrate').innerText = bitrate + " Kbps";
  document.getElementById('representation').innerText = repSwitch.to;
+ bitrate_list.push(bitrate);
+ console.log(bitrate_list);
+ //Aqui cambiar cosas, seguramente haya que actualizar manualmente data en el chart
+ myChart.update();
  }
 }, 500);
 
@@ -82,3 +90,5 @@ var dashAdapter = player.getDashAdapter();
 
 }
 </script>
+
+

@@ -1,4 +1,3 @@
-  GNU nano 6.2                                                                                   index.html                                                                                            
 <script src="dash.all.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
@@ -10,9 +9,9 @@
 <p>Video Bitrate: <span id="bitrate"></span> kbps</p>
  <p>Video Buffer: <span id="buffer"></span> seconds</p>
  <p>Video Representation: <span id="representation"></span></p>
- <canvas id="myChart" width="400" height="400"></canvas>
-
 </div>
+ <canvas id="myChart" width="800" height="400"></canvas>
+
 
 <script>
 document.addEventListener("DOMContentLoaded", function () {
@@ -29,27 +28,24 @@ const protData = {
 }
 };
 
-var bitrate_list = []
+var temp_axis = [0,1,2]
+var bitrate_list = [5000,500,50]
+
 
 var ctx = document.getElementById('myChart').getContext('2d');
 var myChart = new Chart(ctx, {
-    type: 'line', // Tipo de gr  fico: l  nea
+    type: 'line',
     data: {
+        labels: temp_axis,
         datasets: [{
-            label: 'Datos de Ejemplo',
-            data: bitrate_list, // La lista de datos
+             data: bitrate_list,
             fill: false,
-
             borderColor: 'rgb(75, 192, 192)',
-            tension: 0.1 // Hace la l  nea ligeramente curvada
+            tension: 0.1
         }]
     },
     options: {
-        scales: {
-            y: {
-                beginAtZero: true
-            }
-        }
+        responsive: false
     }
 });
 
@@ -58,7 +54,6 @@ var  player
 var  mpd_url = "./output/stream.mpd";
 video = document.querySelector("video");
 player = dashjs.MediaPlayer().create();
-
 player.setProtectionData(protData); // encription
 
 player.initialize(video, mpd_url, true);
@@ -82,7 +77,8 @@ var dashAdapter = player.getDashAdapter();
  bitrate_list.push(bitrate);
  console.log(bitrate_list);
  //Aqui cambiar cosas, seguramente haya que actualizar manualmente data en el chart
- myChart.update();
+ console.log(myChart)
+// myChart.update();
  }
 }, 500);
 

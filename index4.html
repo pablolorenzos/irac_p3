@@ -28,9 +28,24 @@ const protData = {
 }
 };
 
-var temp_axis = [0,1,2]
-var bitrate_list = [5000,500,50]
 
+function formatAMPM(date) {
+    var hours = date.getHours();
+    var minutes = date.getMinutes();
+    var seconds = date.getSeconds();
+    var ampm = hours >= 12 ? 'pm' : 'am';
+    hours = hours % 12;
+    hours = hours ? hours : 12; // la hora '0' debe ser '12'
+    minutes = minutes < 10 ? '0' + minutes : minutes;
+    seconds = seconds < 10 ? '0' + seconds : seconds;
+    var strTime = `${hours}:${minutes}:${seconds} ${ampm}`;
+    return strTime;
+}
+
+
+var temp_axis = []
+var bitrate_list = []
+var buffer_list = []
 
 var ctx = document.getElementById('myChart').getContext('2d');
 var myChart = new Chart(ctx, {
@@ -38,14 +53,39 @@ var myChart = new Chart(ctx, {
     data: {
         labels: temp_axis,
         datasets: [{
-             data: bitrate_list,
+            label: "Bitrate",
+            data: bitrate_list,
             fill: false,
-            borderColor: 'rgb(75, 192, 192)',
-            tension: 0.1
+            tension: 0.1,
+            yAxisID: 'y_axis_bitrate'
+        },
+        {
+            label: "Buffer",
+            data: buffer_list,
+            fill: false,
+            tension: 0.1,
+            yAxisID: 'y_axis_buffer'
         }]
     },
     options: {
-        responsive: false
+        responsive: false,
+        scales: {
+            y_axis_bitrate: {
+                display: true,
+                type: 'linear',
+                position: 'left',
+                ticks: {
+                    beginAtZero: true
+                }},
+            y_axis_buffer: {
+                display: true,
+                type: 'linear',
+                position: 'right',
+                gridLines: {
+                    drawOnChartArea: false // Esto asegura que la grilla del segundo eje no interfiera con la del primero
+                }
+            }
+        }
     }
 });
 
@@ -57,6 +97,7 @@ player = dashjs.MediaPlayer().create();
 player.setProtectionData(protData); // encription
 
 player.initialize(video, mpd_url, true);
+
 player.on(dashjs.MediaPlayer.events["PLAYBACK_ENDED"], function() {
 clearInterval(eventPoller);
 });
@@ -74,11 +115,11 @@ var dashAdapter = player.getDashAdapter();
  document.getElementById('buffer').innerText = bufferLevel + " secs";
  document.getElementById('bitrate').innerText = bitrate + " Kbps";
  document.getElementById('representation').innerText = repSwitch.to;
+ let date = new Date()
+ temp_axis.push(formatAMPM(date));
  bitrate_list.push(bitrate);
- console.log(bitrate_list);
- //Aqui cambiar cosas, seguramente haya que actualizar manualmente data en el chart
- console.log(myChart)
-// myChart.update();
+ buffer_list.push(bufferLevel)
+ myChart.update();
  }
 }, 500);
 
@@ -86,5 +127,4 @@ var dashAdapter = player.getDashAdapter();
 
 }
 </script>
-
 
